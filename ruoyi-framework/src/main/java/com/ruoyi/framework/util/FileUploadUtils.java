@@ -1,12 +1,12 @@
 package com.ruoyi.framework.util;
 
-import java.io.File;
-import java.io.IOException;
-import org.apache.tomcat.util.http.fileupload.FileUploadBase.FileSizeLimitExceededException;
-import org.springframework.web.multipart.MultipartFile;
 import com.ruoyi.common.config.Global;
 import com.ruoyi.common.exception.file.FileNameLengthLimitExceededException;
 import com.ruoyi.common.utils.Md5Utils;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * 文件上传工具类
@@ -91,15 +91,14 @@ public class FileUploadUtils
      *
      * @param baseDir 相对应用的基目录
      * @param file 上传的文件
-     * @param needDatePathAndRandomName 是否需要日期目录和随机文件名前缀
+     * @param extension 是否需要日期目录和随机文件名前缀
      * @param extension 上传文件类型
      * @return 返回上传成功的文件名
-     * @throws FileSizeLimitExceededException 如果超出最大大小
-     * @throws FileNameLengthLimitExceededException 文件名太长
+     * @throws FileNameLengthLimitExceededException 文件名太长  如果超出最大大小
      * @throws IOException 比如读写文件出错时
      */
     public static final String upload(String baseDir, MultipartFile file, String extension)
-            throws FileSizeLimitExceededException, IOException, FileNameLengthLimitExceededException
+            throws IOException, FileNameLengthLimitExceededException
     {
 
         int fileNamelength = file.getOriginalFilename().length();
@@ -148,14 +147,14 @@ public class FileUploadUtils
      *
      * @param file 上传的文件
      * @return
-     * @throws FileSizeLimitExceededException 如果超出最大大小
+     * @throws  Exception 如果超出最大大小
      */
-    public static final void assertAllowed(MultipartFile file) throws FileSizeLimitExceededException
+    public static final void assertAllowed(MultipartFile file) throws IOException
     {
         long size = file.getSize();
         if (DEFAULT_MAX_SIZE != -1 && size > DEFAULT_MAX_SIZE)
         {
-            throw new FileSizeLimitExceededException("not allowed upload upload", size, DEFAULT_MAX_SIZE);
+            throw new RuntimeException("not allowed upload upload");
         }
     }
 }
